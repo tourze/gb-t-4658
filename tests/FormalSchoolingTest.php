@@ -84,7 +84,6 @@ class FormalSchoolingTest extends TestCase
 
         // 测试 toArray 方法
         $array = $instance->toArray();
-        $this->assertIsArray($array);
         $this->assertArrayHasKey('value', $array);
         $this->assertArrayHasKey('label', $array);
         $this->assertSame('11', $array['value']);
@@ -92,7 +91,6 @@ class FormalSchoolingTest extends TestCase
 
         // 测试 toSelectItem 方法
         $item = $instance->toSelectItem();
-        $this->assertIsArray($item);
         $this->assertArrayHasKey('value', $item);
         $this->assertArrayHasKey('label', $item);
         $this->assertArrayHasKey('text', $item);
@@ -109,7 +107,6 @@ class FormalSchoolingTest extends TestCase
     {
         $options = FormalSchooling::genOptions();
 
-        $this->assertIsArray($options);
         $this->assertCount(count(FormalSchooling::cases()), $options);
 
         // 测试几个关键项是否存在
@@ -137,8 +134,7 @@ class FormalSchoolingTest extends TestCase
     {
         $cases = FormalSchooling::cases();
 
-        $this->assertIsArray($cases);
-        $this->assertNotEmpty($cases);
+        $this->assertGreaterThan(0, count($cases));
         $this->assertSame(FormalSchooling::DOCTORAL_GRADUATE, $cases[1]);
     }
 
@@ -151,7 +147,7 @@ class FormalSchoolingTest extends TestCase
 
         // 枚举可以被序列化
         $serialized = serialize($enum);
-        $this->assertIsString($serialized);
+        $this->assertNotEmpty($serialized);
 
         // 反序列化后应该是同一个实例（枚举是单例）
         $unserialized = unserialize($serialized);
@@ -169,7 +165,6 @@ class FormalSchoolingTest extends TestCase
             // 调用 getLabel 方法不应抛出异常
             try {
                 $label = $case->getLabel();
-                $this->assertIsString($label);
                 $this->assertNotEmpty($label);
             } catch (\Throwable $e) {
                 $this->fail(sprintf('枚举值 %s 的 getLabel 方法抛出了异常: %s', $case->name, $e->getMessage()));
