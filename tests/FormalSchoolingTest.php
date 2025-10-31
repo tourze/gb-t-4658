@@ -1,11 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tourze\GBT4658\Tests;
 
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use Tourze\EnumExtra\Itemable;
+use Tourze\EnumExtra\Labelable;
+use Tourze\EnumExtra\Selectable;
 use Tourze\GBT4658\FormalSchooling;
+use Tourze\PHPUnitEnum\AbstractEnumTestCase;
 
-class FormalSchoolingTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(FormalSchooling::class)]
+final class FormalSchoolingTest extends AbstractEnumTestCase
 {
     /**
      * 测试学历代码值是否符合规范
@@ -70,9 +80,23 @@ class FormalSchoolingTest extends TestCase
     {
         $instance = FormalSchooling::DOCTORAL_GRADUATE;
 
-        $this->assertInstanceOf(\Tourze\EnumExtra\Labelable::class, $instance);
-        $this->assertInstanceOf(\Tourze\EnumExtra\Itemable::class, $instance);
-        $this->assertInstanceOf(\Tourze\EnumExtra\Selectable::class, $instance);
+        $this->assertInstanceOf(Labelable::class, $instance);
+        $this->assertInstanceOf(Itemable::class, $instance);
+        $this->assertInstanceOf(Selectable::class, $instance);
+    }
+
+    /**
+     * 测试 toArray 方法（来自 ItemTrait）
+     */
+    public function testToArray(): void
+    {
+        $instance = FormalSchooling::DOCTORAL_GRADUATE;
+
+        $array = $instance->toArray();
+        $this->assertArrayHasKey('value', $array);
+        $this->assertArrayHasKey('label', $array);
+        $this->assertSame('11', $array['value']);
+        $this->assertSame('博士研究生毕业', $array['label']);
     }
 
     /**
@@ -113,11 +137,11 @@ class FormalSchoolingTest extends TestCase
         $found10 = false;
         $found11 = false;
         foreach ($options as $option) {
-            if ($option['value'] === '10') {
+            if ('10' === $option['value']) {
                 $found10 = true;
                 $this->assertSame('研究生教育', $option['label']);
             }
-            if ($option['value'] === '11') {
+            if ('11' === $option['value']) {
                 $found11 = true;
                 $this->assertSame('博士研究生毕业', $option['label']);
             }
@@ -167,7 +191,7 @@ class FormalSchoolingTest extends TestCase
                 $label = $case->getLabel();
                 $this->assertNotEmpty($label);
             } catch (\Throwable $e) {
-                $this->fail(sprintf('枚举值 %s 的 getLabel 方法抛出了异常: %s', $case->name, $e->getMessage()));
+                self::fail(sprintf('枚举值 %s 的 getLabel 方法抛出了异常: %s', $case->name, $e->getMessage()));
             }
         }
     }

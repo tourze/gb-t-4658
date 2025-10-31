@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tourze\GBT4658;
 
 use Tourze\EnumExtra\Itemable;
